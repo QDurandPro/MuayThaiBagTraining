@@ -135,6 +135,15 @@ const HomeScreen = () => {
       });
     };
 
+    // Handle start workout
+    const handleStartWorkout = () => {
+      // Navigate to TimerScreen with the training set ID
+      router.navigate({
+        pathname: '/screens/TimerScreen',
+        params: { trainingSetId: item.id }
+      });
+    };
+
     return (
       <View className="mb-3">
         <Animated.View
@@ -151,6 +160,16 @@ const HomeScreen = () => {
                 <Text className="text-red-700">Rounds: {item.rounds.length}</Text>
                 <Text className="text-red-700">Rest: {item.restTime}s</Text>
               </View>
+
+              {/* Start Workout Button */}
+              <TouchableOpacity 
+                className="bg-green-600 py-2 px-4 rounded-lg mt-3"
+                onPress={handleStartWorkout}
+              >
+                <Text className="text-white font-semibold text-center">
+                  Start Workout
+                </Text>
+              </TouchableOpacity>
             </View>
           </TouchableOpacity>
         </Animated.View>
