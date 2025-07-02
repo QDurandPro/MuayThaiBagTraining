@@ -1,6 +1,6 @@
-# Welcome to your Expo app 👋
+# Muay Thai Bag Training App
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+This is a React Native app built with [Expo](https://expo.dev) for Muay Thai heavy bag training.
 
 ## Get started
 
@@ -13,15 +13,46 @@ This is an [Expo](https://expo.dev) project created with [`create-expo-app`](htt
 2. Start the app
 
    ```bash
-   npx expo start
+   npm start
    ```
 
-In the output, you'll find options to open the app in a
+   Or use one of the platform-specific commands:
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+   ```bash
+   npm run android  # Start on Android
+   npm run ios      # Start on iOS
+   npm run web      # Start on web
+   ```
+
+## Connecting a device or simulator
+
+If you see the error "No apps connected. Sending 'reload' to all React Native apps failed", follow these steps:
+
+### For iOS Simulator:
+1. Make sure you have Xcode installed
+2. Start an iOS simulator before running `npm run ios`
+3. Or press `i` in the terminal after running `npm start`
+
+### For Android Emulator:
+1. Make sure you have Android Studio installed with an emulator set up
+2. Start an Android emulator before running `npm run android`
+3. Or press `a` in the terminal after running `npm start`
+
+### For physical devices:
+1. Install the Expo Go app on your device
+2. Scan the QR code displayed in the terminal with your device's camera
+3. Make sure your device is on the same network as your computer
+
+### Troubleshooting Connection Issues:
+1. Make sure your device/emulator is connected to the same network as your computer
+2. Try restarting the Expo development server with `npm start -- --clear`
+3. Check your firewall settings to ensure it's not blocking the connection
+4. On Android, try using the "tunnel" connection method: `npm start -- --tunnel`
+5. On iOS, ensure that your device trusts the development certificate
+
+### Using Expo Go:
+- [Expo Go for iOS](https://apps.apple.com/app/expo-go/id982107779)
+- [Expo Go for Android](https://play.google.com/store/apps/details?id=host.exp.exponent)
 
 You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
 
