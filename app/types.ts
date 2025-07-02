@@ -10,3 +10,7 @@ export type Round = {
   theme: string;
   duration: number;
 };
+
+// Adding a default export to satisfy Expo Router requirements
+const TypesPage = () => null;
+export default TypesPage;

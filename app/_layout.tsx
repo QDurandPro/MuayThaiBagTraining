@@ -42,6 +42,7 @@ export default function RootLayout() {
             <Ionicons name="timer" size={size} color={color} />
           ),
           headerShown: false,
+          href: null, // Hide this tab from the tab bar
         }}
       />
     </Tabs>

@@ -138,7 +138,8 @@ const HomeScreen = () => {
     // Handle start workout
     const handleStartWorkout = () => {
       // Navigate to TimerScreen with the training set ID
-      router.navigate({
+      // Use router.push instead of router.navigate to force a new screen instance
+      router.push({
         pathname: '/screens/TimerScreen',
         params: { trainingSetId: item.id }
       });
