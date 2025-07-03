@@ -12,6 +12,7 @@ const STORAGE_KEY = '@training_sets';
 // Timer states
 enum TimerState {
   READY = 'ready',
+  COUNTDOWN = 'countdown',
   ROUND = 'round',
   REST = 'rest',
   COMPLETE = 'complete'
@@ -221,8 +222,12 @@ const TimerScreen = () => {
     let interval: ReturnType<typeof setInterval>;
 
     if (isActive && seconds > 0) {
-      // Play countdown beeps during the last 10 seconds if enabled
-      if (AUDIO_CONFIG.enableCountdownBeeps && 
+      // Play beep every second during COUNTDOWN state
+      if (timerState === TimerState.COUNTDOWN) {
+        playBeep();
+      }
+      // Play countdown beeps during the last 10 seconds of ROUND and REST if enabled
+      else if (AUDIO_CONFIG.enableCountdownBeeps && 
           (timerState === TimerState.ROUND || timerState === TimerState.REST) && 
           seconds <= 10 && seconds > 0) {
         playBeep();
@@ -245,7 +250,17 @@ const TimerScreen = () => {
   const handleTimerComplete = () => {
     if (!trainingSet) return;
 
-    if (timerState === TimerState.ROUND) {
+    if (timerState === TimerState.COUNTDOWN) {
+      // Countdown finished, start the first round
+      setTimerState(TimerState.ROUND);
+      setSeconds(trainingSet.rounds[currentRound].duration);
+
+      // Announce the theme of the first round
+      speak(`Round ${currentRound + 1}. ${trainingSet.rounds[currentRound].theme}`);
+      // Play beep for new round
+      playBeep();
+    }
+    else if (timerState === TimerState.ROUND) {
       // Round finished, check if there are more rounds
       if (currentRound < trainingSet.rounds.length - 1) {
         // Move to rest period
@@ -285,12 +300,12 @@ const TimerScreen = () => {
     if (!trainingSet || trainingSet.rounds.length === 0) return;
 
     setCurrentRound(0);
-    setTimerState(TimerState.ROUND);
-    setSeconds(trainingSet.rounds[0].duration);
+    setTimerState(TimerState.COUNTDOWN);
+    setSeconds(15);
     setIsActive(true);
 
-    // Announce the first round theme
-    speak(trainingSet.rounds[0].theme);
+    // Announce the countdown
+    speak("Get ready. 15 second countdown before first round.");
     // Play beep for workout start
     playBeep();
   };
@@ -339,15 +354,15 @@ const TimerScreen = () => {
 
     // Reset to the beginning (first round)
     setCurrentRound(0);
-    // Set state to ROUND to start immediately (not READY)
-    setTimerState(TimerState.ROUND);
-    // Reset to original duration of first round
-    setSeconds(trainingSet.rounds[0].duration);
+    // Set state to COUNTDOWN to start with countdown (not directly to ROUND)
+    setTimerState(TimerState.COUNTDOWN);
+    // Set countdown duration
+    setSeconds(15);
     // Ensure timer is running
     setIsActive(true);
 
     // Announce the reset
-    speak("Workout reset");
+    speak("Workout reset. Get ready for countdown.");
     playBeep();
   };
 
@@ -369,6 +384,13 @@ const TimerScreen = () => {
         console.error('Error stopping sound:', error);
       }
     }
+
+    // Reset all states to completely clear the current training set
+    setTrainingSet(null);
+    setTimerState(TimerState.READY);
+    setCurrentRound(0);
+    setSeconds(0);
+    setError(null);
 
     // Navigate back to home screen
     router.navigate('/');
@@ -450,7 +472,9 @@ const TimerScreen = () => {
         </Text>
         {timerState !== TimerState.READY && (
           <Text className="text-lg text-gray-300">
-            Round {currentRound + 1} of {trainingSet?.rounds.length}
+            {timerState === TimerState.COUNTDOWN 
+              ? `Get ready for Round ${currentRound + 1}` 
+              : `Round ${currentRound + 1} of ${trainingSet?.rounds.length}`}
           </Text>
         )}
       </View>
@@ -465,20 +489,32 @@ const TimerScreen = () => {
           </View>
         ) : (
           <>
-            {/* Round/Rest indicator */}
+            {/* Round/Rest/Countdown indicator */}
             <Text className="text-xl font-bold text-white mb-4">
-              {timerState === TimerState.REST ? 'REST' : getCurrentTheme()}
+              {timerState === TimerState.REST 
+                ? 'REST' 
+                : timerState === TimerState.COUNTDOWN 
+                  ? 'GET READY' 
+                  : getCurrentTheme()}
             </Text>
 
             {/* Timer circle */}
             <View className={`rounded-full w-64 h-64 justify-center items-center shadow-lg mb-8 ${
-              timerState === TimerState.REST ? 'bg-blue-900' : 'bg-red-900'
+              timerState === TimerState.REST 
+                ? 'bg-blue-900' 
+                : timerState === TimerState.COUNTDOWN 
+                  ? 'bg-yellow-700' 
+                  : 'bg-red-900'
             }`}>
               <Text className="text-6xl font-bold text-white">
                 {formatTime(seconds)}
               </Text>
               <Text className="text-xl text-gray-300 mt-2">
-                {timerState === TimerState.REST ? 'Rest' : 'Round'}
+                {timerState === TimerState.REST 
+                  ? 'Rest' 
+                  : timerState === TimerState.COUNTDOWN 
+                    ? 'Countdown' 
+                    : 'Round'}
               </Text>
             </View>
           </>
@@ -493,24 +529,29 @@ const TimerScreen = () => {
             onPress={toggleTimer}
           >
             <Text className="text-white font-semibold text-lg">
-              {timerState === TimerState.READY ? 'Start' : 
-               isActive ? 'Pause' : 'Resume'}
+              {timerState === TimerState.READY 
+                ? 'Start' 
+                : isActive 
+                  ? 'Pause' 
+                  : 'Resume'}
             </Text>
           </TouchableOpacity>
         </View>
 
         {/* Reset Controls - Only show during active workout */}
-        {(timerState === TimerState.ROUND || timerState === TimerState.REST) && (
+        {(timerState === TimerState.ROUND || timerState === TimerState.REST || timerState === TimerState.COUNTDOWN) && (
           <View className="flex-row space-x-4">
             {/* Reset Current button - Show during round or rest */}
-            <TouchableOpacity 
-              className="py-3 px-6 rounded-lg shadow-md bg-orange-600"
-              onPress={resetRound}
-            >
-              <Text className="text-white font-semibold">
-                {timerState === TimerState.ROUND ? 'Reset Round' : 'Reset Rest'}
-              </Text>
-            </TouchableOpacity>
+            {(timerState === TimerState.ROUND || timerState === TimerState.REST) && (
+              <TouchableOpacity 
+                className="py-3 px-6 rounded-lg shadow-md bg-orange-600"
+                onPress={resetRound}
+              >
+                <Text className="text-white font-semibold">
+                  {timerState === TimerState.ROUND ? 'Reset Round' : 'Reset Rest'}
+                </Text>
+              </TouchableOpacity>
+            )}
 
             {/* Reset All button */}
             <TouchableOpacity 
