@@ -94,11 +94,7 @@ const HomeScreen = () => {
           return Math.abs(gestureState.dx) > Math.abs(gestureState.dy * 3);
         },
         onPanResponderGrant: () => {
-          pan.setOffset({
-            x: pan.x._value,
-            y: 0
-          });
-          pan.setValue({ x: 0, y: 0 });
+          pan.extractOffset();
         },
         onPanResponderMove: Animated.event(
           [null, { dx: pan.x }],

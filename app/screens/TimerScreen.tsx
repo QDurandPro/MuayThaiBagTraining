@@ -218,7 +218,7 @@ const TimerScreen = () => {
 
   // Timer logic
   useEffect(() => {
-    let interval: NodeJS.Timeout | null = null;
+    let interval: ReturnType<typeof setInterval>;
 
     if (isActive && seconds > 0) {
       // Play countdown beeps during the last 10 seconds if enabled
@@ -232,7 +232,7 @@ const TimerScreen = () => {
         setSeconds(seconds => seconds - 1);
       }, 1000);
     } else if (isActive && seconds === 0) {
-      // Time's up, transition to next state
+      // Time's up, transition to next the state
       handleTimerComplete();
     }
 
@@ -500,7 +500,7 @@ const TimerScreen = () => {
         </View>
 
         {/* Reset Controls - Only show during active workout */}
-        {timerState !== TimerState.READY && timerState !== TimerState.COMPLETE && (
+        {(timerState === TimerState.ROUND || timerState === TimerState.REST) && (
           <View className="flex-row space-x-4">
             {/* Reset Current button - Show during round or rest */}
             <TouchableOpacity 
