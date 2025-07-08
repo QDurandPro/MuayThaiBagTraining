@@ -3,7 +3,7 @@ import { Text, View, TouchableOpacity, ActivityIndicator, Alert, AppState } from
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Ionicons } from '@expo/vector-icons';
-import { TrainingSet } from '../types';
+import { TrainingSet } from '../../src/types';
 import * as Speech from 'expo-speech';
 import { Audio } from 'expo-av';
 

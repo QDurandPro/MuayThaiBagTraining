@@ -10,9 +10,9 @@ import {
   View,
 } from 'react-native';
 
-import { TrainingSetCard } from '../components/TrainingSetCard';
-import { useTrainingSets } from '../hooks/useTrainingSets';
-import { TrainingSet } from '../types';
+import { TrainingSetCard } from '../../src/components/TrainingSetCard';
+import { useTrainingSets } from '../../src/hooks/useTrainingSets';
+import { TrainingSet } from '../../src/types';
 
 const HomeScreen: React.FC = () => {
   const router = useRouter();

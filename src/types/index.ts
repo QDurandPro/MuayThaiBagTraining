@@ -1,8 +1,7 @@
 // Centralised app-wide TypeScript types
 // --------------------------------------
-// Instead of putting this file in the routeable root of the Expo Router (which
-// required a dummy default export), we locate it under `app/types/` so it’s
-// never treated as a screen.
+// Keep shared types here, outside the Expo Router `app` directory so they’re
+// never treated as routes.
 
 export type TrainingSet = {
   id: string;
@@ -26,6 +25,3 @@ export enum TimerState {
   REST = 'rest',
   COMPLETE = 'complete',
 }
-
-// Dummy default export to silence Expo Router route warning
-export default {};

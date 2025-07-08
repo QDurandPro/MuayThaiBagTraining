@@ -64,6 +64,3 @@ export const useTrainingSets = () => {
     deleteTrainingSet: remove,
   } as const;
 };
-
-// Dummy default export so Expo Router ignores this non-screen file
-export default {};

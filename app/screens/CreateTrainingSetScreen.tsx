@@ -11,7 +11,7 @@ import {
   TouchableOpacity,
   View
 } from 'react-native';
-import { Round, TrainingSet } from '../types';
+import { Round, TrainingSet } from '../../src/types';
 
 const STORAGE_KEY = '@training_sets';
 

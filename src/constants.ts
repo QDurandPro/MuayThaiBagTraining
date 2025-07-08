@@ -19,6 +19,3 @@ export const DEFAULT_THEMES: string[] = [
   'Clinch',
   'Combos',
 ];
-
-// Dummy default export so Expo Router doesn’t treat this as a screen
-export default {};

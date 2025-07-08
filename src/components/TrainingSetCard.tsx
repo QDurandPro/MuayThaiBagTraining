@@ -98,5 +98,4 @@ const TrainingSetCardComponent: React.FC<Props> = ({ item, onEdit, onStart, onDe
 
 export const TrainingSetCard = React.memo(TrainingSetCardComponent);
 
-// Default export to satisfy Expo Router's route discovery (ignored by consumers)
-export default TrainingSetCard;
+// Named export only; no default export to avoid accidental route registration
