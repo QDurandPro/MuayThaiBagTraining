@@ -1,17 +1,17 @@
-import React, { useState, useEffect } from 'react';
-import { 
-  Text, 
-  View, 
-  TouchableOpacity, 
-  TextInput, 
-  ScrollView, 
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useLocalSearchParams, useRouter } from 'expo-router';
+import React, { useEffect, useState } from 'react';
+import {
   Alert,
   KeyboardAvoidingView,
-  Platform
+  Platform,
+  ScrollView,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View
 } from 'react-native';
-import { useRouter, useLocalSearchParams } from 'expo-router';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { TrainingSet, Round } from '../types';
+import { Round, TrainingSet } from '../types';
 
 const STORAGE_KEY = '@training_sets';
 
@@ -155,8 +155,6 @@ const CreateTrainingSetScreen = () => {
         // Save updated training sets
         await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(updatedTrainingSets));
 
-        // Show success message
-        Alert.alert('Success', 'Training set updated successfully');
       } else {
         // Create new training set
         const trainingSet: TrainingSet = {
@@ -174,9 +172,6 @@ const CreateTrainingSetScreen = () => {
 
         // Save to AsyncStorage
         await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(trainingSets));
-
-        // Show success message
-        Alert.alert('Success', 'Training set created successfully');
       }
 
       // Navigate back to home screen
