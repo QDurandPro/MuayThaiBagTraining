@@ -9,9 +9,13 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
-  View
+  View,
 } from 'react-native';
-import { Round, TrainingSet } from '../../src/types';
+import { Round, TrainingSet } from '../src/types';
+
+// Hide this screen from the bottom tab bar
+export const href = null;
+export const options = { headerShown: false };
 
 const STORAGE_KEY = '@training_sets';
 
@@ -27,7 +31,7 @@ const THEMES = [
   'Knees',
   'Elbows',
   'Clinch',
-  'Combos'
+  'Combos',
 ];
 
 const CreateTrainingSetScreen = () => {
@@ -62,10 +66,12 @@ const CreateTrainingSetScreen = () => {
         setRestTime(trainingSet.restTime.toString());
 
         // Pre-fill rounds (without ids)
-        setRounds(trainingSet.rounds.map(round => ({
-          theme: round.theme,
-          duration: round.duration
-        })));
+        setRounds(
+          trainingSet.rounds.map((round) => ({
+            theme: round.theme,
+            duration: round.duration,
+          }))
+        );
       } catch (error) {
         console.error('Error parsing training set data:', error);
       }
@@ -82,7 +88,7 @@ const CreateTrainingSetScreen = () => {
       for (let i = rounds.length; i < roundCount; i++) {
         newRounds.push({
           theme: THEMES[i % THEMES.length],
-          duration: 180
+          duration: 180,
         });
       }
       setRounds(newRounds);
@@ -135,18 +141,18 @@ const CreateTrainingSetScreen = () => {
 
       if (isEditMode && editingId) {
         // Update existing training set
-        const updatedTrainingSets = trainingSets.map(set => {
+        const updatedTrainingSets = trainingSets.map((set) => {
           if (set.id === editingId) {
             // Keep the same ID but update other fields
             return {
               id: editingId,
               name: name.trim(),
-              rounds: rounds.map(round => ({
+              rounds: rounds.map((round) => ({
                 ...round,
                 // Generate new IDs for rounds or keep existing ones if available
-                id: generateId()
+                id: generateId(),
               })),
-              restTime: parseInt(restTime) || 60
+              restTime: parseInt(restTime) || 60,
             };
           }
           return set;
@@ -154,17 +160,16 @@ const CreateTrainingSetScreen = () => {
 
         // Save updated training sets
         await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(updatedTrainingSets));
-
       } else {
         // Create new training set
         const trainingSet: TrainingSet = {
           id: generateId(),
           name: name.trim(),
-          rounds: rounds.map(round => ({
+          rounds: rounds.map((round) => ({
             ...round,
-            id: generateId()
+            id: generateId(),
           })),
-          restTime: parseInt(restTime) || 60
+          restTime: parseInt(restTime) || 60,
         };
 
         // Add new training set
@@ -226,7 +231,10 @@ const CreateTrainingSetScreen = () => {
         <Text className="text-2xl font-bold text-red-500 mb-4">Rounds</Text>
 
         {rounds.map((round, index) => (
-          <View key={index} className="bg-gray-800 p-4 rounded-lg mb-4 border border-gray-700">
+          <View
+            key={index}
+            className="bg-gray-800 p-4 rounded-lg mb-4 border border-gray-700"
+          >
             <Text className="text-lg text-white font-bold mb-2">Round {index + 1}</Text>
 
             <Text className="text-gray-300 mb-1">Theme</Text>
@@ -251,7 +259,7 @@ const CreateTrainingSetScreen = () => {
         ))}
 
         <View className="mt-6 mb-20">
-          <TouchableOpacity 
+          <TouchableOpacity
             className="bg-red-600 py-3 px-6 rounded-lg shadow-md w-full mb-4"
             onPress={saveTrainingSet}
           >
@@ -260,7 +268,7 @@ const CreateTrainingSetScreen = () => {
             </Text>
           </TouchableOpacity>
 
-          <TouchableOpacity 
+          <TouchableOpacity
             className="py-3 px-6 rounded-lg border border-gray-600 w-full"
             onPress={() => router.navigate('/')}
           >
