@@ -14,12 +14,12 @@ import { TrainingSetCard } from '../src/components/TrainingSetCard';
 import { useTrainingSets } from '../src/hooks/useTrainingSets';
 import { TrainingSet } from '../src/types';
 
-import { FontAwesome } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 
 export const options = {
   title: 'Home',
-  tabBarIcon: ({ color }: { color: string }) => (
-    <FontAwesome name="home" size={28} color={color} />
+  tabBarIcon: ({ color, size }: { color: string; size?: number }) => (
+    <Ionicons name="home-outline" size={size ?? 28} color={color} />
   ),
 };
 

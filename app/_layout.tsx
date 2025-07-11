@@ -1,11 +1,9 @@
 import { Ionicons } from '@expo/vector-icons';
-import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { Tabs } from "expo-router";
 import React from 'react';
 
 // ensure vector icon fonts are loaded
 Ionicons.loadFont();
-FontAwesome.loadFont();
 import './globals.css';
 
 export default function RootLayout() {
