@@ -14,7 +14,6 @@ import {
 import { Round, TrainingSet } from '../src/types';
 
 // Hide this screen from the bottom tab bar
-export const href = null;
 export const options = { headerShown: false };
 
 const STORAGE_KEY = '@training_sets';

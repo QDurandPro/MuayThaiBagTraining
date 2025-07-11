@@ -8,8 +8,8 @@ import * as Speech from 'expo-speech';
 import { Audio } from 'expo-av';
 
 // Hide from tab bar
-export const options = { headerShown: false };
 export const href = null;
+export const options = { headerShown: false };
 
 const STORAGE_KEY = '@training_sets';
 

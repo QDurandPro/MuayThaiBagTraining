@@ -14,6 +14,15 @@ import { TrainingSetCard } from '../src/components/TrainingSetCard';
 import { useTrainingSets } from '../src/hooks/useTrainingSets';
 import { TrainingSet } from '../src/types';
 
+import { FontAwesome } from '@expo/vector-icons';
+
+export const options = {
+  title: 'Home',
+  tabBarIcon: ({ color }: { color: string }) => (
+    <FontAwesome name="home" size={28} color={color} />
+  ),
+};
+
 const HomeScreen: React.FC = () => {
   const router = useRouter();
   const { trainingSets, loading, reload, deleteTrainingSet } = useTrainingSets();

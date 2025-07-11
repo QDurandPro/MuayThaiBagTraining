@@ -1,6 +1,11 @@
 import { Ionicons } from '@expo/vector-icons';
+import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { Tabs } from "expo-router";
 import React from 'react';
+
+// ensure vector icon fonts are loaded
+Ionicons.loadFont();
+FontAwesome.loadFont();
 import './globals.css';
 
 export default function RootLayout() {
@@ -14,6 +19,29 @@ export default function RootLayout() {
         },
         headerShown: false,
       }}
-    />
+    >
+      <Tabs.Screen
+        name="index"
+        options={{
+          title: 'Home',
+          tabBarIcon: ({ color, size }: { color: string; size: number }) => (
+            <Ionicons name="home-outline" color={color} size={size} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="create"
+        options={{
+          title: 'Create',
+          tabBarIcon: ({ color, size }: { color: string; size: number }) => (
+            <Ionicons name="add-circle-outline" color={color} size={size} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="timer"
+        options={{ href: null }}
+      />
+    </Tabs>
   );
 }
