@@ -52,7 +52,9 @@ const TimerScreen = () => {
 
   // Audio state
   const [soundLoaded, setSoundLoaded] = useState(false);
+  const [bellLoaded, setBellLoaded] = useState(false);
   const beepSoundRef = useRef<Audio.Sound | null>(null);
+  const bellSoundRef = useRef<Audio.Sound | null>(null);
 
   // Prevent first appstate change
   let isFirstChange = true;
@@ -73,6 +75,17 @@ const TimerScreen = () => {
           );
           beepSoundRef.current = sound;
           setSoundLoaded(true);
+          // Load boxing bell sound
+          try {
+            const { sound: bell } = await Audio.Sound.createAsync(
+              require('../assets/sounds/boxing-bell.mp3'),
+              { volume: AUDIO_CONFIG.beepVolume }
+            );
+            bellSoundRef.current = bell;
+            setBellLoaded(true);
+          } catch (bellError) {
+            console.error('Error loading boxing-bell.mp3:', bellError);
+          }
         } catch (soundError) {
           console.error('Error loading beep.mp3:', soundError);
           const fallbackSound = await Audio.Sound.createAsync(
@@ -98,6 +111,9 @@ const TimerScreen = () => {
       if (beepSoundRef.current) {
         beepSoundRef.current.unloadAsync();
       }
+      if (bellSoundRef.current) {
+        bellSoundRef.current.unloadAsync();
+      }
       if (AUDIO_CONFIG.enableTTS) {
         Speech.stop();
       }
@@ -111,6 +127,16 @@ const TimerScreen = () => {
       await beepSoundRef.current.playAsync();
     } catch (error) {
       console.error('Error playing sound:', error);
+    }
+  };
+
+  const playBell = async () => {
+    if (!AUDIO_CONFIG.enableBeeps || !bellSoundRef.current || !bellLoaded) return;
+    try {
+      await bellSoundRef.current.setPositionAsync(0);
+      await bellSoundRef.current.playAsync();
+    } catch (error) {
+      console.error('Error playing bell sound:', error);
     }
   };
 
@@ -184,18 +210,24 @@ const TimerScreen = () => {
     };
   }, [isActive, seconds]);
 
-  // Play beeps according to timer state
+  // Play sounds according to timer state
   useEffect(() => {
-    if (!AUDIO_CONFIG.enableBeeps || !isActive || seconds === 0) return;
+    if (!AUDIO_CONFIG.enableBeeps || !isActive) return;
 
     if (timerState === TimerState.COUNTDOWN) {
-      // Beep every second during full countdown
+      // Beep every second during countdown
       playBeep();
-    } else if (
-      (timerState === TimerState.ROUND || timerState === TimerState.REST) &&
-      seconds <= 10
-    ) {
-      // Beep only for last 10 seconds of round or rest
+    } else if (timerState === TimerState.ROUND) {
+      // Bell at the very first second is handled when ROUND starts.
+      if (seconds === 1) {
+        // Last second of round
+        playBell();
+      } else if (AUDIO_CONFIG.enableCountdownBeeps && seconds <= 10) {
+        // Countdown beeps for the last 10 seconds (except last one)
+        playBeep();
+      }
+    } else if (timerState === TimerState.REST && seconds <= 10) {
+      // Countdown beeps during rest period
       playBeep();
     }
   }, [seconds, timerState, isActive]);
@@ -252,18 +284,16 @@ const TimerScreen = () => {
       setTimerState(TimerState.ROUND);
       setSeconds(trainingSet.rounds[currentRound].duration);
       speak(`Round ${currentRound + 1}. ${trainingSet.rounds[currentRound].theme}`);
-      playBeep();
+      playBell();
     } else if (timerState === TimerState.ROUND) {
       if (currentRound < trainingSet.rounds.length - 1) {
         setTimerState(TimerState.REST);
         setSeconds(trainingSet.restTime);
         speak('Rest');
-        playBeep();
       } else {
         setTimerState(TimerState.COMPLETE);
         setIsActive(false);
         speak('Workout Complete');
-        playBeep();
       }
     } else if (timerState === TimerState.REST) {
       const nextRound = currentRound + 1;
@@ -271,7 +301,7 @@ const TimerScreen = () => {
       setTimerState(TimerState.ROUND);
       setSeconds(trainingSet.rounds[nextRound].duration);
       speak(trainingSet.rounds[nextRound].theme);
-      playBeep();
+      playBell();
     }
   };
 
