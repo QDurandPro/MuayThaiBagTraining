@@ -7,20 +7,29 @@
     "ios": "expo run:ios",
     "web": "expo start --web"
   },
+  "expo": {
+    "doctor": {
+      "reactNativeDirectoryCheck": {
+        "listUnknownPackages": false
+      }
+    }
+  },
   "dependencies": {
+    "@expo/config-plugins": "~10.1.1",
     "@react-native-async-storage/async-storage": "2.1.2",
-    "expo": "^53.0.15",
-    "expo-router": "^5.1.2",
-    "expo-splash-screen": "^0.30.9",
+    "expo": "53.0.20",
+    "expo-av": "~15.1.7",
+    "expo-router": "~5.1.4",
+    "expo-speech": "~13.1.7",
+    "expo-splash-screen": "~0.30.10",
     "metro": "^0.82.4",
     "nativewind": "^4.1.23",
+    "react": "19.0.0",
     "react-native": "0.79.5",
     "react-native-reanimated": "~3.17.4",
     "react-native-safe-area-context": "5.4.0",
     "tailwindcss": "^3.4.17",
-    "react": "19.0.0",
-    "expo-speech": "~13.1.7",
-    "expo-av": "~15.1.7"
+    "react-native-screens": "~4.11.1"
   },
   "devDependencies": {
     "@types/react": "~19.0.10",

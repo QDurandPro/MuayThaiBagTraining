@@ -8,11 +8,19 @@
     "scheme": "muaythaibagtraining",
     "jsEngine": "hermes",
     "userInterfaceStyle": "automatic",
-    "newArchEnabled": true,
+    "newArchEnabled": false,
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.anonymous.muay-thai-bag-training"
     },
     "android": {
+      "permissions": [
+        "INTERNET",
+        "VIBRATE"
+      ],
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
@@ -39,6 +47,12 @@
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "fe2f24b1-b370-4c0e-8eb3-3d7d54ea716c"
+      }
     }
   }
 }
